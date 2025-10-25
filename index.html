@@ -29,7 +29,7 @@ html,body{
   backdrop-filter:blur(4px);
 }
 #globalLoader::after{
-  content:"صبر کن جیگر 😘";
+  content:"😘شکیبا باش جیگر";
   animation:pulse 1.5s infinite;
 }
 @keyframes pulse{
@@ -355,6 +355,7 @@ function placeDates(){
   }catch(err){console.error('خطا:',err)}
   finally{
     document.getElementById('globalLoader').style.display='none';
+    setTimeout(() => location.reload(), 300000); // رفرش خودکار هر 5 دقیقه
   }
 })();
 </script>
