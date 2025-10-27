@@ -29,7 +29,7 @@ html,body{
   backdrop-filter:blur(4px);
 }
 #globalLoader::after{
-  content:"😘شکیبا باش جیگر";
+  content:"در حال بارگذاری...";
   animation:pulse 1.5s infinite;
 }
 @keyframes pulse{
@@ -56,7 +56,7 @@ html,body{
 }
 
 .square::before{
-  content:"...یه لحظه";
+  content:"در حال بارگذاری تصویر...";
   position:absolute;
   color:#aaaaff;
   font-size:1rem;
@@ -117,25 +117,16 @@ img.loaded{opacity:1}
   font-size:2rem;
   font-weight:900;
   margin-bottom:10px;
-  color:#8000ff;
+  color:#ffcc00;
   text-shadow:
-    0 0 6px rgba(128,0,255,0.7),
-    0 0 12px rgba(128,0,255,0.6),
-    0 0 20px rgba(128,0,255,0.5);
+    0 0 6px rgba(255,204,0,0.7),
+    0 0 12px rgba(255,170,0,0.6),
+    0 0 20px rgba(255,140,0,0.5);
 }
 
 .text{
   font-size:1rem;
   color:#ffffff;
-  margin-top:8px;
-  text-align:center;
-}
-.author{
-  font-size:0.9rem;
-  color:#ffffff;
-  background:#ff69b4;
-  padding:4px 8px;
-  border-radius:8px;
   margin-top:8px;
   text-align:center;
 }
@@ -286,14 +277,12 @@ function placeDates(){
       const [y,m,d] = s.split('/').map(n=>parseInt(n,10));
       const pattern = new RegExp(s+"([\\s\\S]{0,300})");
       const match = doc.documentElement.innerText.match(pattern);
-      let content="", author="";
+      let content = "";
       if(match){
         const lines = match[1].trim().split('\n');
         content = lines[0];
-        const authorMatch = lines.join(' ').match(/توسط\s+([^|،\n]+)/);
-        if(authorMatch) author = authorMatch[1].trim();
       }
-      return { str:`${y.toString().padStart(4,'0')}/${m.toString().padStart(2,'0')}/${d.toString().padStart(2,'0')}`, key:y*10000+m*100+d, y,m,d, text:content, author:author };
+      return { str:`${y.toString().padStart(4,'0')}/${m.toString().padStart(2,'0')}/${d.toString().padStart(2,'0')}`, key:y*10000+m*100+d, y,m,d, text:content };
     });
 
     const seen=new Set(), orderedUnique=[];
@@ -333,19 +322,12 @@ function placeDates(){
         box.appendChild(textSpan);
       }
 
-      if(obj.author){
-        const authorSpan=document.createElement('span');
-        authorSpan.className='author';
-        authorSpan.textContent=obj.author;
-        box.appendChild(authorSpan);
-      }
-
       container.appendChild(box);
     });
 
     const credit=document.createElement('div');
     credit.className='ai-credit';
-    credit.textContent='روح آدولف هیتلر بالای سر شماست';
+    credit.textContent='ساخته شده با هوش مصنوعی 🤖';
     container.appendChild(credit);
 
     placeDates();
@@ -355,7 +337,7 @@ function placeDates(){
   }catch(err){console.error('خطا:',err)}
   finally{
     document.getElementById('globalLoader').style.display='none';
-    setTimeout(() => location.reload(), 300000); // رفرش خودکار هر 5 دقیقه
+    setTimeout(() => location.reload(), 300000);
   }
 })();
 </script>
