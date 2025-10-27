@@ -29,7 +29,7 @@ html,body{
   backdrop-filter:blur(4px);
 }
 #globalLoader::after{
-  content:"در حال بارگذاری...";
+  content:"...ایستا کن";
   animation:pulse 1.5s infinite;
 }
 @keyframes pulse{
@@ -56,7 +56,7 @@ html,body{
 }
 
 .square::before{
-  content:"در حال بارگذاری تصویر...";
+  content:"...الان میاد";
   position:absolute;
   color:#aaaaff;
   font-size:1rem;
@@ -327,7 +327,7 @@ function placeDates(){
 
     const credit=document.createElement('div');
     credit.className='ai-credit';
-    credit.textContent='ساخته شده با هوش مصنوعی 🤖';
+    credit.textContent='روح آدولف هیتلر بالای سر شماست';
     container.appendChild(credit);
 
     placeDates();
