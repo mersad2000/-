@@ -251,13 +251,13 @@ function placeDates(){
 }
 
 (async function(){
-  const proxy='https://api.allorigins.win/raw?url=';
+  const proxy='https://corsproxy.io/?';
   const target='https://sani111.blogfa.com';
   const container=document.getElementById('datesContainer');
   const img=document.getElementById('blogImage');
 
   try{
-    const res=await fetch(proxy+encodeURIComponent(target), { cache: 'no-store' });
+    const res=await fetch(proxy+encodeURIComponent(target));
     if(!res.ok)throw new Error('شبکه پاسخ نداد');
     const html=await res.text();
     const doc=new DOMParser().parseFromString(html,'text/html');
