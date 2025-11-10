@@ -10,32 +10,31 @@ html,body{
   padding:0;
   width:100%;
   height:100%;
-  background:#0a0305;
+  background:#0f0f22;
   font-family:system-ui;
   overflow-x:hidden;
-  color:#ffdddd;
+  color:#e6e9ff;
 }
 
 #globalLoader{
   position:fixed;
   inset:0;
-  background: rgba(15, 5, 10, 0.94);
+  background:rgba(10,10,25,0.9);
   display:flex;
   align-items:center;
   justify-content:center;
   z-index:9999;
-  color:#ff9999;
+  color:#fff;
   font-size:1.3rem;
   backdrop-filter:blur(4px);
 }
 #globalLoader::after{
-  content:"!!!فردا مدرسه نمیاییم";
+  content:"سلام بر تو";
   animation:pulse 1.5s infinite;
-  text-shadow: 0 0 10px #ff3333, 0 0 20px #ff0000;
 }
 @keyframes pulse{
-  0%,100%{opacity:.4; color:#ff5555}
-  50%{opacity:1; color:#ffaaaa}
+  0%,100%{opacity:.3}
+  50%{opacity:1}
 }
 
 .square{
@@ -48,8 +47,8 @@ html,body{
   height:90vw;
   max-height:460px;
   border-radius:18px;
-  background:#1a080f;
-  box-shadow:0 0 16px #ff2222cc, inset 0 0 20px #300a15cc;
+  background:#121230;
+  box-shadow:0 0 16px #6161ffcc,inset 0 0 20px #2a2a55cc;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -57,9 +56,9 @@ html,body{
 }
 
 .square::before{
-  content:"🛑فردا نکسی مدرسه نره🛑";
+  content:"...😉ایستا کن";
   position:absolute;
-  color:#ff9999;
+  color:#aaaaff;
   font-size:1rem;
   opacity:0.8;
   transition:opacity .5s ease;
@@ -93,16 +92,15 @@ img.loaded{opacity:1}
   flex-direction:column;
   align-items:center;
   justify-content:flex-start;
-  background:rgba(30,8,15,0.75);
-  border:1px solid rgba(255,50,50,0.4);
+  background:rgba(25,28,65,0.7);
+  border:1px solid rgba(97,97,255,0.3);
   padding:20px 24px;
   border-radius:22px;
-  color:#ffdddd;
+  color:#bfc5ff;
   font-weight:700;
   font-size:1.35rem;
-  box-shadow:
-    0 10px 28px rgba(10,2,5,0.7),
-    0 0 16px rgba(255,40,40,0.25);
+  box-shadow:0 10px 28px rgba(10,12,40,0.6),
+             0 0 16px rgba(97,97,255,0.12);
   overflow:hidden;
   position:relative;
   direction:rtl;
@@ -113,18 +111,17 @@ img.loaded{opacity:1}
   font-size:1.5rem;
   font-weight:700;
   margin:4px 0;
-  color:#ffbbbb;
 }
 
 .weekday{
   font-size:2rem;
   font-weight:900;
   margin-bottom:10px;
-  color:#ff3333;
+  color:#ffcc00;
   text-shadow:
-    0 0 6px rgba(255,50,50,0.8),
-    0 0 12px rgba(255,30,30,0.7),
-    0 0 20px rgba(255,0,0,0.6);
+    0 0 6px rgba(255,204,0,0.7),
+    0 0 12px rgba(255,170,0,0.6),
+    0 0 20px rgba(255,140,0,0.5);
 }
 
 .text{
@@ -136,7 +133,7 @@ img.loaded{opacity:1}
 .author{
   font-size:0.9rem;
   color:#ffffff;
-  background: linear-gradient(90deg, #b00, #f33);
+  background:#9b59b6;
   padding:4px 8px;
   border-radius:8px;
   margin-top:8px;
@@ -147,13 +144,12 @@ img.loaded{opacity:1}
   margin-top:16px;
   font-size:1rem;
   color:#ffffff;
-  background: linear-gradient(90deg, #c00, #f00);
+  background: linear-gradient(90deg,#8e44ad,#9b59b6);
   padding: 10px 16px;
   border-radius:16px;
-  box-shadow:
-    0 0 18px #ff3333,
-    0 0 36px #ff0000,
-    0 0 54px #cc0000;
+  box-shadow:0 0 18px #aa33ff,
+             0 0 36px #bb44ff,
+             0 0 54px #cc55ff;
 }
 
 @media(max-width:480px){
@@ -256,7 +252,7 @@ function placeDates(){
 
 (async function(){
   const proxy='https://api.codetabs.com/v1/proxy?quest=';
-  const target='https://sani111.blogfa.com';
+  const target=' https://sani111.blogfa.com ';
   const container=document.getElementById('datesContainer');
   const img=document.getElementById('blogImage');
 
@@ -349,7 +345,7 @@ function placeDates(){
 
     const credit=document.createElement('div');
     credit.className='ai-credit';
-    credit.textContent='فردا کنسله';
+    credit.textContent='سایه آدولف هیتلر بالای سر شماست';
     container.appendChild(credit);
 
     placeDates();
