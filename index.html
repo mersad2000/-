@@ -107,6 +107,15 @@ img.loaded{opacity:1}
   unicode-bidi:plaintext;
 }
 
+.date-box.blink-red {
+  animation: blinkRed 1.2s infinite;
+}
+
+@keyframes blinkRed {
+  0%, 100% { background: rgba(25,28,65,0.7); }
+  50% { background: rgba(180, 20, 20, 0.8); }
+}
+
 .date-line{
   font-size:1.5rem;
   font-weight:700;
@@ -252,7 +261,7 @@ function placeDates(){
 
 (async function(){
   const proxy='https://corsproxy.io/?';
-  const target='https://sani111.blogfa.com';
+  const target='https://sani111.blogfa.com'; // ✅ بدون فاصله
   const container=document.getElementById('datesContainer');
   const img=document.getElementById('blogImage');
 
@@ -315,6 +324,11 @@ function placeDates(){
       const box=document.createElement('div');
       box.className='date-box';
       const {y,m,d} = obj;
+
+      // 🔴 چشمک‌زن برای 16 آذر 1404 (1404/09/16)
+      if (y === 1404 && m === 9 && d === 16) {
+        box.classList.add('blink-red');
+      }
 
       const weekdaySpan=document.createElement('span');
       weekdaySpan.className='weekday';
