@@ -56,7 +56,7 @@ html,body{
 }
 
 .square::before{
-  content:"...😉ایستا کن";
+  content:"💋";
   position:absolute;
   color:#aaaaff;
   font-size:1rem;
@@ -105,15 +105,38 @@ img.loaded{opacity:1}
   position:relative;
   direction:rtl;
   unicode-bidi:plaintext;
+  transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
 }
 
-.date-box.blink-red {
-  animation: blinkRed 1.2s infinite;
+/* حالت قرمز چشمک‌زن */
+.date-box.highlight{
+  background:rgba(80,20,30,0.8);
+  border-color:rgba(220,60,60,0.6);
+  box-shadow:0 10px 28px rgba(30,10,15,0.7),
+             0 0 16px rgba(220,60,60,0.3);
 }
 
-@keyframes blinkRed {
-  0%, 100% { background: rgba(25,28,65,0.7); }
-  50% { background: rgba(180, 20, 20, 0.8); }
+.text{
+  font-size:1rem;
+  color:#ffffff;
+  margin-top:8px;
+  text-align:center;
+}
+
+.author{
+  font-size:0.9rem;
+  color:#ffffff;
+  background:#9b59b6; /* بنفش اصلی */
+  padding:4px 8px;
+  border-radius:8px;
+  margin-top:8px;
+  text-align:center;
+  transition: background 0.4s;
+}
+
+/* حالت نارنجی برای نویسنده در حالت چشمک */
+.author.highlight{
+  background:#ff8c00; /* نارنجی */
 }
 
 .date-line{
@@ -133,41 +156,69 @@ img.loaded{opacity:1}
     0 0 20px rgba(255,140,0,0.5);
 }
 
-.text{
-  font-size:1rem;
-  color:#ffffff;
-  margin-top:8px;
-  text-align:center;
-}
-.author{
-  font-size:0.9rem;
-  color:#ffffff;
-  background:#9b59b6;
-  padding:4px 8px;
-  border-radius:8px;
-  margin-top:8px;
-  text-align:center;
-}
-.ai-credit{
-  text-align:center;
-  margin-top:16px;
-  font-size:1rem;
-  color:#ffffff;
-  background: linear-gradient(90deg,#8e44ad,#9b59b6);
-  padding: 10px 16px;
-  border-radius:16px;
-  box-shadow:0 0 18px #aa33ff,
-             0 0 36px #bb44ff,
-             0 0 54px #cc55ff;
+.ai-credit {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 48px;
+  border-radius: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.2);
+  isolation: isolate;
+  z-index: 999;
+  cursor: default;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
 }
 
-@media(max-width:480px){
-  .square{top:3%;width:95vw;height:95vw;border-radius:16px}
-  .dates-container{width:95vw}
+.ai-credit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  box-shadow: inset 0 0 15px -5px #000000;
+  background-color: rgba(255, 255, 255, 0);
+  z-index: 0;
+}
+
+.ai-credit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  filter: url(#glass-distortion);
+  -webkit-filter: url(#glass-distortion);
+  z-index: -1;
+}
+
+.ai-credit span {
+  position: relative;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  font-family: system-ui, 'Segoe UI', sans-serif;
+  z-index: 1;
+  text-align: center;
 }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position: absolute;">
+  <filter id="glass-distortion">
+    <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" stitchTiles="stitch" />
+    <feDisplacementMap in="SourceGraphic" scale="77" />
+  </filter>
+</svg>
+
 <div id="globalLoader"></div>
 <div class="square" id="squareBox"><img id="blogImage" alt="در حال بارگذاری تصویر..."></div>
 <div class="dates-container" id="datesContainer"></div>
@@ -260,8 +311,8 @@ function placeDates(){
 }
 
 (async function(){
-  const proxy='https://corsproxy.io/?';
-  const target='https://sani111.blogfa.com'; // ✅ بدون فاصله
+  const proxy='https://api.codetabs.com/v1/proxy?quest=';
+  const target='https://sani111.blogfa.com';
   const container=document.getElementById('datesContainer');
   const img=document.getElementById('blogImage');
 
@@ -323,12 +374,15 @@ function placeDates(){
     filtered.forEach(obj=>{
       const box=document.createElement('div');
       box.className='date-box';
-      const {y,m,d} = obj;
-
-      // 🔴 چشمک‌زن برای 16 آذر 1404 (1404/09/16)
-      if (y === 1404 && m === 9 && d === 16) {
-        box.classList.add('blink-red');
+      
+      let finalText = obj.text;
+      let isSpecial = false;
+      if (finalText.startsWith('##')) {
+        isSpecial = true;
+        finalText = finalText.substring(2).trim();
       }
+
+      const {y,m,d} = obj;
 
       const weekdaySpan=document.createElement('span');
       weekdaySpan.className='weekday';
@@ -340,27 +394,40 @@ function placeDates(){
       dateLine.textContent=toPersianNumber(d)+' '+persianMonths[m-1]+' '+toPersianNumber(y);
       box.appendChild(dateLine);
 
-      if(obj.text){
+      if(finalText){
         const textSpan=document.createElement('span');
         textSpan.className='text';
-        textSpan.textContent=obj.text;
+        textSpan.textContent=finalText;
         box.appendChild(textSpan);
       }
 
+      let authorSpan = null;
       if(obj.author){
-        const authorSpan=document.createElement('span');
+        authorSpan = document.createElement('span');
         authorSpan.className='author';
         authorSpan.textContent=obj.author;
         box.appendChild(authorSpan);
       }
 
       container.appendChild(box);
+
+      // اگر متن با ## شروع شده، چشمک بزن
+      if (isSpecial) {
+        setInterval(() => {
+          box.classList.toggle('highlight');
+          if (authorSpan) {
+            authorSpan.classList.toggle('highlight');
+          }
+        }, 600); // هر 600ms یک‌بار toggle
+      }
     });
 
-    const credit=document.createElement('div');
-    credit.className='ai-credit';
-    credit.textContent='سایه آدولف هیتلر بالای سر شماست';
-    container.appendChild(credit);
+    const credit = document.createElement('div');
+    credit.className = 'ai-credit';
+    const creditText = document.createElement('span');
+    creditText.textContent = 'روح آدولف هیتلر بالای سر شماست';
+    credit.appendChild(creditText);
+    document.body.appendChild(credit);
 
     placeDates();
     window.addEventListener('resize',()=>setTimeout(placeDates,80));
