@@ -16,6 +16,47 @@ html,body{
   color:#e6e9ff;
 }
 
+/* --- لایه رمز --- */
+#passwordScreen {
+  position: fixed;
+  inset: 0;
+  background: #0a0a19;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  color: #fff;
+  font-family: system-ui;
+}
+#passwordScreen input {
+  margin-top: 16px;
+  padding: 10px 16px;
+  font-size: 1.1rem;
+  border: 1px solid #666;
+  border-radius: 8px;
+  background: #1a1a30;
+  color: white;
+  text-align: center;
+  width: 200px;
+}
+#passwordScreen button {
+  margin-top: 12px;
+  padding: 8px 20px;
+  background: #9b59b6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#passwordScreen .error {
+  margin-top: 10px;
+  color: #ff6b6b;
+  font-size: 0.9rem;
+  min-height: 1.2rem;
+}
+
+/* --- لودینگ کلی --- */
 #globalLoader{
   position:fixed;
   inset:0;
@@ -29,7 +70,7 @@ html,body{
   backdrop-filter:blur(4px);
 }
 #globalLoader::after{
-  content:"بسوزد زندان که سوخت جگرم";
+  content:"...در حال ورود";
   animation:pulse 1.5s infinite;
 }
 @keyframes pulse{
@@ -56,7 +97,7 @@ html,body{
 }
 
 .square::before{
-  content:"💋وایستا";
+  content:"💋شکیبا باش جیگر";
   position:absolute;
   color:#aaaaff;
   font-size:1rem;
@@ -108,35 +149,11 @@ img.loaded{opacity:1}
   transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
 }
 
-/* حالت قرمز چشمک‌زن */
 .date-box.highlight{
   background:rgba(80,20,30,0.8);
   border-color:rgba(220,60,60,0.6);
   box-shadow:0 10px 28px rgba(30,10,15,0.7),
              0 0 16px rgba(220,60,60,0.3);
-}
-
-.text{
-  font-size:1rem;
-  color:#ffffff;
-  margin-top:8px;
-  text-align:center;
-}
-
-.author{
-  font-size:0.9rem;
-  color:#ffffff;
-  background:#9b59b6; /* بنفش اصلی */
-  padding:4px 8px;
-  border-radius:8px;
-  margin-top:8px;
-  text-align:center;
-  transition: background 0.4s;
-}
-
-/* حالت نارنجی برای نویسنده در حالت چشمک */
-.author.highlight{
-  background:#ff8c00; /* نارنجی */
 }
 
 .date-line{
@@ -154,6 +171,26 @@ img.loaded{opacity:1}
     0 0 6px rgba(255,204,0,0.7),
     0 0 12px rgba(255,170,0,0.6),
     0 0 20px rgba(255,140,0,0.5);
+}
+
+.text{
+  font-size:1rem;
+  color:#ffffff;
+  margin-top:8px;
+  text-align:center;
+}
+.author{
+  font-size:0.9rem;
+  color:#ffffff;
+  background:#9b59b6;
+  padding:4px 8px;
+  border-radius:8px;
+  margin-top:8px;
+  text-align:center;
+  transition: background 0.4s;
+}
+.author.highlight{
+  background:#ff8c00;
 }
 
 .ai-credit {
@@ -212,6 +249,13 @@ img.loaded{opacity:1}
 </style>
 </head>
 <body>
+<div id="passwordScreen">
+  <div>رمز عبور را وارد کنید:</div>
+  <input type="password" id="pwdInput" maxlength="4" inputmode="numeric">
+  <button id="pwdSubmit">تایید</button>
+  <div class="error" id="pwdError"></div>
+</div>
+
 <svg width="0" height="0" style="position: absolute;">
   <filter id="glass-distortion">
     <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" stitchTiles="stitch" />
@@ -219,11 +263,35 @@ img.loaded{opacity:1}
   </filter>
 </svg>
 
-<div id="globalLoader"></div>
-<div class="square" id="squareBox"><img id="blogImage" alt="در حال بارگذاری تصویر..."></div>
-<div class="dates-container" id="datesContainer"></div>
+<div id="globalLoader" style="display:none;"></div>
+<div class="square" id="squareBox"><img id="blogImage" alt="در حال بارگذاری تصویر..." style="display:none;"></div>
+<div class="dates-container" id="datesContainer" style="display:none;"></div>
 
 <script>
+const CORRECT_PASSWORD = "1235";
+
+document.getElementById('pwdSubmit').addEventListener('click', checkPassword);
+document.getElementById('pwdInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') checkPassword();
+});
+
+function checkPassword() {
+  const input = document.getElementById('pwdInput').value.trim();
+  const errorEl = document.getElementById('pwdError');
+  if (input === CORRECT_PASSWORD) {
+    document.getElementById('passwordScreen').style.display = 'none';
+    document.getElementById('globalLoader').style.display = 'flex';
+    document.getElementById('blogImage').style.display = 'block';
+    document.getElementById('datesContainer').style.display = 'flex';
+    startApp();
+  } else {
+    errorEl.textContent = '⛔اشتب زدی⛔';
+    document.getElementById('pwdInput').value = '';
+    document.getElementById('pwdInput').focus();
+  }
+}
+
+function startApp() {
 const persianMonths=["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
 const persianWeekdays=["یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه","شنبه"];
 function toPersianNumber(s){return String(s).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d])}
@@ -411,21 +479,20 @@ function placeDates(){
 
       container.appendChild(box);
 
-      // اگر متن با ## شروع شده، چشمک بزن
       if (isSpecial) {
         setInterval(() => {
           box.classList.toggle('highlight');
           if (authorSpan) {
             authorSpan.classList.toggle('highlight');
           }
-        }, 600); // هر 600ms یک‌بار toggle
+        }, 600);
       }
     });
 
     const credit = document.createElement('div');
     credit.className = 'ai-credit';
     const creditText = document.createElement('span');
-    creditText.textContent = '✋روح آدولف هیتلر بالای سر شماست';
+    creditText.textContent = 'روح آدولف هیتلر بالای سر شماست✋';
     credit.appendChild(creditText);
     document.body.appendChild(credit);
 
@@ -439,6 +506,7 @@ function placeDates(){
     setTimeout(() => location.reload(), 300000);
   }
 })();
+}
 </script>
 </body>
 </html>
