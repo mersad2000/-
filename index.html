@@ -15,8 +15,6 @@ html,body{
   overflow-x:hidden;
   color:#e6e9ff;
 }
-
-/* --- لایه رمز --- */
 #passwordScreen {
   position: fixed;
   inset: 0;
@@ -55,8 +53,6 @@ html,body{
   font-size: 0.9rem;
   min-height: 1.2rem;
 }
-
-/* --- لودینگ کلی --- */
 #globalLoader{
   position:fixed;
   inset:0;
@@ -70,14 +66,13 @@ html,body{
   backdrop-filter:blur(4px);
 }
 #globalLoader::after{
-  content:"...از باگ آگاهیم";
+  content:"...در حال ورود";
   animation:pulse 1.5s infinite;
 }
 @keyframes pulse{
   0%,100%{opacity:.3}
   50%{opacity:1}
 }
-
 .square{
   position:absolute;
   top:3%;
@@ -95,7 +90,6 @@ html,body{
   justify-content:center;
   overflow:hidden;
 }
-
 .square::before{
   content:"💋شکیبا باش جیگر";
   position:absolute;
@@ -105,7 +99,6 @@ html,body{
   transition:opacity .5s ease;
 }
 .square.loaded::before{opacity:0}
-
 img{
   width:100%;
   height:100%;
@@ -114,7 +107,6 @@ img{
   transition:opacity .8s ease;
 }
 img.loaded{opacity:1}
-
 .dates-container{
   position:absolute;
   left:50%;
@@ -127,7 +119,6 @@ img.loaded{opacity:1}
   padding:6px 0;
   pointer-events:auto;
 }
-
 .date-box{
   display:flex;
   flex-direction:column;
@@ -148,20 +139,17 @@ img.loaded{opacity:1}
   unicode-bidi:plaintext;
   transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
 }
-
 .date-box.highlight{
   background:rgba(80,20,30,0.8);
   border-color:rgba(220,60,60,0.6);
   box-shadow:0 10px 28px rgba(30,10,15,0.7),
              0 0 16px rgba(220,60,60,0.3);
 }
-
 .date-line{
   font-size:1.5rem;
   font-weight:700;
   margin:4px 0;
 }
-
 .weekday{
   font-size:2rem;
   font-weight:900;
@@ -172,7 +160,6 @@ img.loaded{opacity:1}
     0 0 12px rgba(255,170,0,0.6),
     0 0 20px rgba(255,140,0,0.5);
 }
-
 .text{
   font-size:1rem;
   color:#ffffff;
@@ -192,7 +179,6 @@ img.loaded{opacity:1}
 .author.highlight{
   background:#ff8c00;
 }
-
 .ai-credit {
   position: fixed;
   bottom: 16px;
@@ -213,7 +199,6 @@ img.loaded{opacity:1}
   padding: 0;
   margin: 0;
 }
-
 .ai-credit::before {
   content: '';
   position: absolute;
@@ -223,7 +208,6 @@ img.loaded{opacity:1}
   background-color: rgba(255, 255, 255, 0);
   z-index: 0;
 }
-
 .ai-credit::after {
   content: '';
   position: absolute;
@@ -235,7 +219,6 @@ img.loaded{opacity:1}
   -webkit-filter: url(#glass-distortion);
   z-index: -1;
 }
-
 .ai-credit span {
   position: relative;
   color: white;
@@ -359,17 +342,18 @@ function jalaliToGregorian(jy, jm, jd){
   return {gy, gm, gd};
 }
 function isLeapGregorian(y){return (y%4===0 && y%100!==0) || (y%400===0);}
-function getTodayJalaliKey(){
-  const today = new Date();
-  const gY = today.getFullYear(), gM = today.getMonth()+1, gD = today.getDate();
-  const {jy,jm,jd} = gregorianToJalali(gY,gM,gD);
-  return {jy,jm,jd, key: jy*10000 + jm*100 + jd, hour: today.getHours(), minute: today.getMinutes()};
-}
 function getWeekdayJalali(y,m,d){
   const g = jalaliToGregorian(y,m,d);
   const day = new Date(g.gy, g.gm-1, g.gd).getDay();
-  const shiftedDay = (day + 2) % 7;
-  return persianWeekdays[shiftedDay];
+  return persianWeekdays[day];
+}
+function getAdjustedWeekday(y, m, d) {
+  const key = y * 10000 + m * 100 + d;
+  const pivotKey = 14041011; // 11 دی 1404
+  const baseWeekdayIndex = persianWeekdays.indexOf(getWeekdayJalali(y, m, d));
+  let offset = key < pivotKey ? 2 : 1;
+  const adjustedIndex = (baseWeekdayIndex + offset) % 7;
+  return persianWeekdays[adjustedIndex];
 }
 function placeDates(){
   const box=document.getElementById('squareBox'),
@@ -454,7 +438,7 @@ function placeDates(){
 
       const weekdaySpan=document.createElement('span');
       weekdaySpan.className='weekday';
-      weekdaySpan.textContent=getWeekdayJalali(y,m,d);
+      weekdaySpan.textContent=getAdjustedWeekday(y, m, d);
       box.appendChild(weekdaySpan);
 
       const dateLine=document.createElement('div');
@@ -504,6 +488,13 @@ function placeDates(){
   finally{
     document.getElementById('globalLoader').style.display='none';
     setTimeout(() => location.reload(), 300000);
+  }
+
+  function getTodayJalaliKey(){
+    const today = new Date();
+    const gY = today.getFullYear(), gM = today.getMonth()+1, gD = today.getDate();
+    const {jy,jm,jd} = gregorianToJalali(gY,gM,gD);
+    return {jy,jm,jd, key: jy*10000 + jm*100 + jd, hour: today.getHours(), minute: today.getMinutes()};
   }
 })();
 }
