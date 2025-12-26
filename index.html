@@ -2,8 +2,9 @@
 <html lang="fa">
 <head>
 <meta charset="utf-8">
+<meta name="refresh" content="300">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>تاریخ‌ها با نئون، متن و نویسنده</title>
+<title>تاریخ‌ها با نئون</title>
 <style>
 html,body{
   margin:0;
@@ -15,44 +16,8 @@ html,body{
   overflow-x:hidden;
   color:#e6e9ff;
 }
-#passwordScreen {
-  position: fixed;
-  inset: 0;
-  background: #0a0a19;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 99999;
-  color: #fff;
-  font-family: system-ui;
-}
-#passwordScreen input {
-  margin-top: 16px;
-  padding: 10px 16px;
-  font-size: 1.1rem;
-  border: 1px solid #666;
-  border-radius: 8px;
-  background: #1a1a30;
-  color: white;
-  text-align: center;
-  width: 200px;
-}
-#passwordScreen button {
-  margin-top: 12px;
-  padding: 8px 20px;
-  background: #9b59b6;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-#passwordScreen .error {
-  margin-top: 10px;
-  color: #ff6b6b;
-  font-size: 0.9rem;
-  min-height: 1.2rem;
-}
+
+/* لودر */
 #globalLoader{
   position:fixed;
   inset:0;
@@ -66,13 +31,14 @@ html,body{
   backdrop-filter:blur(4px);
 }
 #globalLoader::after{
-  content:"...در حال ورود";
+  content:"نظر سنجی مدرسه فراموش نشه";
   animation:pulse 1.5s infinite;
 }
 @keyframes pulse{
   0%,100%{opacity:.3}
   50%{opacity:1}
 }
+
 .square{
   position:absolute;
   top:3%;
@@ -107,6 +73,7 @@ img{
   transition:opacity .8s ease;
 }
 img.loaded{opacity:1}
+
 .dates-container{
   position:absolute;
   left:50%;
@@ -179,65 +146,159 @@ img.loaded{opacity:1}
 .author.highlight{
   background:#ff8c00;
 }
-.ai-credit {
-  position: fixed;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 280px;
+
+/* =========================================
+   استایل دکمه شیشه‌ای (Liquid Glass) - اصلاح شده
+   ========================================= */
+.liquid-glass {
+  /* حالت اولیه: دایره پایین صفحه */
+  width: 48px; 
   height: 48px;
   border-radius: 28px;
+  position: fixed;
+  bottom: -100px;
+  left: 50%;
+  transform: translateX(-50%); /* فقط وسط‌چین، بدون اسکیل */
+  isolation: isolate;
+  box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.2);
-  isolation: isolate;
-  z-index: 999;
-  cursor: default;
   border: none;
   background: none;
   padding: 0;
   margin: 0;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  overflow: hidden; 
+  white-space: nowrap;
 }
-.ai-credit::before {
+
+/* 1. کلاس انیمیشن ورود */
+.liquid-glass.appear {
+  animation: elasticEntrance 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* 2. کلاس تثبیت (بعد از پایان ورود اضافه می‌شود) */
+.liquid-glass.stable {
+  bottom: 16px;
+  width: 280px;
+  height: 48px;
+}
+
+/* 3. کلاس انیمیشن کلیک (روی حالت تثبیت اجرا می‌شود) */
+.liquid-glass.clicked {
+  animation: popClick 0.6s ease-in-out forwards;
+}
+
+/* انیمیشن ورود */
+@keyframes elasticEntrance {
+  0% {
+    bottom: -100px;
+    width: 48px;
+    height: 48px;
+  }
+  30% {
+    bottom: 16px;
+    width: 48px;
+    height: 48px;
+  }
+  45% {
+    bottom: 16px;
+    width: 330px; /* کشیده */
+    height: 40px;
+  }
+  65% {
+    bottom: 16px;
+    width: 260px; /* جمع */
+    height: 52px;
+  }
+  100% {
+    bottom: 16px;
+    width: 280px;
+    height: 48px;
+  }
+}
+
+/* انیمیشن کلیک (دقیقاً طبق دستور) */
+@keyframes popClick {
+  0% { 
+    transform: translateX(-50%) scale(1); 
+  }
+  35% { 
+    transform: translateX(-50%) scale(1.15); /* بزرگ */
+  }
+  65% { 
+    transform: translateX(-50%) scale(0.9);  /* کوچک‌تر از عادی */
+  }
+  85% { 
+    transform: translateX(-50%) scale(1.05); /* کمی بزرگ‌تر از عادی */
+  }
+  100% { 
+    transform: translateX(-50%) scale(1);    /* عادی */
+  }
+}
+
+
+.liquid-glass::before {
   content: '';
   position: absolute;
   inset: 0;
+  z-index: 0;
   border-radius: 28px;
   box-shadow: inset 0 0 15px -5px #000000;
   background-color: rgba(255, 255, 255, 0);
-  z-index: 0;
 }
-.ai-credit::after {
+
+.liquid-glass::after {
   content: '';
   position: absolute;
   inset: 0;
+  z-index: -1;
   border-radius: 28px;
   backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(0px);
   filter: url(#glass-distortion);
   -webkit-filter: url(#glass-distortion);
-  z-index: -1;
 }
-.ai-credit span {
+
+/* متن */
+.glass-text {
   position: relative;
-  color: white;
+  color: #ffffff;
   font-size: 16px;
-  font-weight: 500;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  font-family: system-ui, 'Segoe UI', sans-serif;
+  font-weight: 600;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  font-family: 'Georgia', 'Microsoft YaHei', '微软雅黑', serif;
   z-index: 1;
   text-align: center;
+  opacity: 0; /* پیش‌فرض مخفی */
+  transition: opacity 0.5s, transform 0.5s;
+  transform: translateY(5px);
 }
+
+/* وقتی انیمیشن ورود شروع می‌شود */
+.liquid-glass.appear .glass-text {
+  animation: fadeInText 0.5s ease forwards;
+  animation-delay: 1.1s;
+}
+
+/* وقتی حالت تثبیت شده است، متن همیشه نمایان باشد */
+.liquid-glass.stable .glass-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeInText {
+  to { opacity: 1; transform: translateY(0); }
+}
+
 </style>
 </head>
 <body>
-<div id="passwordScreen">
-  <div>رمز عبور را وارد کنید:</div>
-  <input type="password" id="pwdInput" maxlength="4" inputmode="numeric">
-  <button id="pwdSubmit">تایید</button>
-  <div class="error" id="pwdError"></div>
-</div>
 
 <svg width="0" height="0" style="position: absolute;">
   <filter id="glass-distortion">
@@ -246,123 +307,109 @@ img.loaded{opacity:1}
   </filter>
 </svg>
 
-<div id="globalLoader" style="display:none;"></div>
+<div id="globalLoader"></div>
 <div class="square" id="squareBox"><img id="blogImage" alt="در حال بارگذاری تصویر..." style="display:none;"></div>
 <div class="dates-container" id="datesContainer" style="display:none;"></div>
 
 <script>
-const CORRECT_PASSWORD = "1235";
-
-document.getElementById('pwdSubmit').addEventListener('click', checkPassword);
-document.getElementById('pwdInput').addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') checkPassword();
-});
-
-function checkPassword() {
-  const input = document.getElementById('pwdInput').value.trim();
-  const errorEl = document.getElementById('pwdError');
-  if (input === CORRECT_PASSWORD) {
-    document.getElementById('passwordScreen').style.display = 'none';
-    document.getElementById('globalLoader').style.display = 'flex';
-    document.getElementById('blogImage').style.display = 'block';
-    document.getElementById('datesContainer').style.display = 'flex';
-    startApp();
-  } else {
-    errorEl.textContent = '⛔اشتب زدی⛔';
-    document.getElementById('pwdInput').value = '';
-    document.getElementById('pwdInput').focus();
-  }
-}
-
-function startApp() {
-const persianMonths=["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
-const persianWeekdays=["یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه","شنبه"];
-function toPersianNumber(s){return String(s).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d])}
-function div(a,b){return Math.floor(a/b);}
-function gregorianToJalali(gy, gm, gd){
-  const g_d_m = [0,31, (isLeapGregorian(gy)?29:28),31,30,31,30,31,31,30,31,30,31];
-  let gy2 = gy - 1600;
-  let gm2 = gm - 1;
-  let gd2 = gd - 1;
-  let g_day_no = 365*gy2 + div((gy2+3),4) - div((gy2+99),100) + div((gy2+399),400);
-  for (let i=0;i<gm2;++i) g_day_no += g_d_m[i+1];
-  g_day_no += gd2;
-  let j_day_no = g_day_no - 79;
-  let j_np = div(j_day_no, 12053);
-  j_day_no = j_day_no % 12053;
-  let jy = 979 + 33*j_np + 4*div(j_day_no,1461);
-  j_day_no %= 1461;
-  if (j_day_no >= 366){
-    jy += div((j_day_no-1),365);
-    j_day_no = (j_day_no-1)%365;
-  }
-  const j_month_days = [31,31,31,31,31,31,30,30,30,30,30,29];
-  let jm=0;
-  for (let i=0;i<12;i++){
-    if (j_day_no < j_month_days[i]){ jm = i+1; break; }
-    j_day_no -= j_month_days[i];
-  }
-  let jd = j_day_no+1;
-  return {jy, jm, jd};
-}
-function jalaliToGregorian(jy, jm, jd){
-  jy = jy - 979;
-  jm = jm - 1;
-  jd = jd - 1;
-  let j_day_no = 365*jy + div(jy,33)*8 + div((jy%33 +3),4);
-  const j_month_days = [31,31,31,31,31,31,30,30,30,30,30,29];
-  for (let i=0;i<jm;i++) j_day_no += j_month_days[i];
-  j_day_no += jd;
-  let g_day_no = j_day_no + 79;
-  let gy = 1600 + 400*div(g_day_no,146097);
-  g_day_no = g_day_no % 146097;
-  let leap = true;
-  if (g_day_no >= 36525){
-    g_day_no--;
-    gy += 100*div(g_day_no,36524);
-    g_day_no = g_day_no % 36524;
-    if (g_day_no >= 365) g_day_no++;
-    else leap = false;
-  }
-  gy += 4*div(g_day_no,1461);
-  g_day_no %= 1461;
-  if (g_day_no >= 366){
-    leap = false;
-    g_day_no -= 366;
-    gy += div(g_day_no,365);
-    g_day_no = g_day_no % 365;
-  }
-  const g_month_days = [31, (isLeapGregorian(gy)?29:28),31,30,31,30,31,31,30,31,30,31];
-  let gm=0;
-  for (let i=0;i<12;i++){
-    if (g_day_no < g_month_days[i]){ gm = i+1; break; }
-    g_day_no -= g_month_days[i];
-  }
-  let gd = g_day_no + 1;
-  return {gy, gm, gd};
-}
-function isLeapGregorian(y){return (y%4===0 && y%100!==0) || (y%400===0);}
-function getWeekdayJalali(y,m,d){
-  const g = jalaliToGregorian(y,m,d);
-  const day = new Date(g.gy, g.gm-1, g.gd).getDay();
-  return persianWeekdays[day];
-}
-function getAdjustedWeekday(y, m, d) {
-  const key = y * 10000 + m * 100 + d;
-  const pivotKey = 14041011; // 11 دی 1404
-  const baseWeekdayIndex = persianWeekdays.indexOf(getWeekdayJalali(y, m, d));
-  let offset = key < pivotKey ? 2 : 1;
-  const adjustedIndex = (baseWeekdayIndex + offset) % 7;
-  return persianWeekdays[adjustedIndex];
-}
-function placeDates(){
-  const box=document.getElementById('squareBox'),
-        container=document.getElementById('datesContainer');
-  const rect=box.getBoundingClientRect();
-  container.style.top=(window.scrollY+rect.bottom+16)+'px';
-}
-
 (async function(){
+  // --- توابع کمکی ---
+  const persianMonths=["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
+  const persianWeekdays=["یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه","شنبه"];
+  
+  function toPersianNumber(s){return String(s).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d])}
+  function div(a,b){return Math.floor(a/b);}
+  function gregorianToJalali(gy, gm, gd){
+    const g_d_m = [0,31, (isLeapGregorian(gy)?29:28),31,30,31,30,31,31,30,31,30,31];
+    let gy2 = gy - 1600;
+    let gm2 = gm - 1;
+    let gd2 = gd - 1;
+    let g_day_no = 365*gy2 + div((gy2+3),4) - div((gy2+99),100) + div((gy2+399),400);
+    for (let i=0;i<gm2;++i) g_day_no += g_d_m[i+1];
+    g_day_no += gd2;
+    let j_day_no = g_day_no - 79;
+    let j_np = div(j_day_no, 12053);
+    j_day_no = j_day_no % 12053;
+    let jy = 979 + 33*j_np + 4*div(j_day_no,1461);
+    j_day_no %= 1461;
+    if (j_day_no >= 366){
+      jy += div((j_day_no-1),365);
+      j_day_no = (j_day_no-1)%365;
+    }
+    const j_month_days = [31,31,31,31,31,31,30,30,30,30,30,29];
+    let jm=0;
+    for (let i=0;i<12;i++){
+      if (j_day_no < j_month_days[i]){ jm = i+1; break; }
+      j_day_no -= j_month_days[i];
+    }
+    let jd = j_day_no+1;
+    return {jy, jm, jd};
+  }
+  function jalaliToGregorian(jy, jm, jd){
+    jy = jy - 979;
+    jm = jm - 1;
+    jd = jd - 1;
+    let j_day_no = 365*jy + div(jy,33)*8 + div((jy%33 +3),4);
+    const j_month_days = [31,31,31,31,31,31,30,30,30,30,30,29];
+    for (let i=0;i<jm;i++) j_day_no += j_month_days[i];
+    j_day_no += jd;
+    let g_day_no = j_day_no + 79;
+    let gy = 1600 + 400*div(g_day_no,146097);
+    g_day_no = g_day_no % 146097;
+    let leap = true;
+    if (g_day_no >= 36525){
+      g_day_no--;
+      gy += 100*div(g_day_no,36524);
+      g_day_no = g_day_no % 36524;
+      if (g_day_no >= 365) g_day_no++;
+      else leap = false;
+    }
+    gy += 4*div(g_day_no,1461);
+    g_day_no %= 1461;
+    if (g_day_no >= 366){
+      leap = false;
+      g_day_no -= 366;
+      gy += div(g_day_no,365);
+      g_day_no = g_day_no % 365;
+    }
+    const g_month_days = [31, (isLeapGregorian(gy)?29:28),31,30,31,30,31,31,30,31,30,31];
+    let gm=0;
+    for (let i=0;i<12;i++){
+      if (g_day_no < g_month_days[i]){ gm = i+1; break; }
+      g_day_no -= g_month_days[i];
+    }
+    let gd = g_day_no + 1;
+    return {gy, gm, gd};
+  }
+  function isLeapGregorian(y){return (y%4===0 && y%100!==0) || (y%400===0);}
+  function getWeekdayJalali(y,m,d){
+    const g = jalaliToGregorian(y,m,d);
+    const day = new Date(g.gy, g.gm-1, g.gd).getDay();
+    return persianWeekdays[day];
+  }
+  function getAdjustedWeekday(y, m, d) {
+    const key = y * 10000 + m * 100 + d;
+    const pivotKey = 14041011; 
+    const baseWeekdayIndex = persianWeekdays.indexOf(getWeekdayJalali(y, m, d));
+    let offset = key < pivotKey ? 2 : 1;
+    const adjustedIndex = (baseWeekdayIndex + offset) % 7;
+    return persianWeekdays[adjustedIndex];
+  }
+  function placeDates(){
+    const box=document.getElementById('squareBox'),
+          container=document.getElementById('datesContainer');
+    if(!box || !container) return;
+    const rect=box.getBoundingClientRect();
+    container.style.top=(window.scrollY+rect.bottom+16)+'px';
+  }
+  function getTodayJalaliKey(){
+    const today = new Date();
+    const gY = today.getFullYear(), gM = today.getMonth()+1, gD = today.getDate();
+    const {jy,jm,jd} = gregorianToJalali(gY,gM,gD);
+    return {jy,jm,jd, key: jy*10000 + jm*100 + jd, hour: today.getHours(), minute: today.getMinutes()};
+  }
+
+  // --- دریافت اطلاعات ---
   const proxy='https://api.codetabs.com/v1/proxy?quest=';
   const target='https://sani111.blogfa.com';
   const container=document.getElementById('datesContainer');
@@ -385,100 +432,137 @@ function placeDates(){
         placeDates();
       };
     }
+    
+    document.getElementById('blogImage').style.display = 'block';
+    document.getElementById('datesContainer').style.display = 'flex';
 
     const regex=/\b\d{4}\/\d{2}\/\d{2}\b/g;
     const rawMatches=Array.from(new Set((doc.documentElement.textContent.match(regex)||[])));
-    if(!rawMatches.length) return;
+    
+    if(rawMatches.length){
+        const todayJ = getTodayJalaliKey();
+        const todayKey = todayJ.key;
+        const after830 = todayJ.hour > 8 || (todayJ.hour===8 && todayJ.minute>=30);
 
-    const todayJ = getTodayJalaliKey();
-    const todayKey = todayJ.key;
-    const after830 = todayJ.hour > 8 || (todayJ.hour===8 && todayJ.minute>=30);
+        const dateObjects = rawMatches.map(s=>{
+        const [y,m,d] = s.split('/').map(n=>parseInt(n,10));
+        const pattern = new RegExp(s+"([\\s\\S]{0,300})");
+        const match = doc.documentElement.innerText.match(pattern);
+        let content = "", author = "";
+        if(match){
+            const lines = match[1].trim().split('\n');
+            content = lines[0];
+            const authorMatch = lines.join(' ').match(/توسط\s+([^|،\n]+)/);
+            if(authorMatch) author = authorMatch[1].trim();
+        }
+        return { str:`${y.toString().padStart(4,'0')}/${m.toString().padStart(2,'0')}/${d.toString().padStart(2,'0')}`, key:y*10000+m*100+d, y,m,d, text:content, author:author };
+        });
 
-    const dateObjects = rawMatches.map(s=>{
-      const [y,m,d] = s.split('/').map(n=>parseInt(n,10));
-      const pattern = new RegExp(s+"([\\s\\S]{0,300})");
-      const match = doc.documentElement.innerText.match(pattern);
-      let content = "", author = "";
-      if(match){
-        const lines = match[1].trim().split('\n');
-        content = lines[0];
-        const authorMatch = lines.join(' ').match(/توسط\s+([^|،\n]+)/);
-        if(authorMatch) author = authorMatch[1].trim();
-      }
-      return { str:`${y.toString().padStart(4,'0')}/${m.toString().padStart(2,'0')}/${d.toString().padStart(2,'0')}`, key:y*10000+m*100+d, y,m,d, text:content, author:author };
-    });
+        const seen=new Set(), orderedUnique=[];
+        for(const obj of dateObjects){
+        if(!seen.has(obj.key)){
+            seen.add(obj.key);
+            orderedUnique.push(obj);
+        }
+        }
+        orderedUnique.sort((a,b)=>a.key-b.key);
 
-    const seen=new Set(), orderedUnique=[];
-    for(const obj of dateObjects){
-      if(!seen.has(obj.key)){
-        seen.add(obj.key);
-        orderedUnique.push(obj);
-      }
+        const filtered = orderedUnique.filter(o => {
+        if(o.key < todayKey) return false;
+        if(after830 && o.key === todayKey) return false;
+        return true;
+        });
+
+        filtered.forEach(obj=>{
+        const box=document.createElement('div');
+        box.className='date-box';
+        
+        let finalText = obj.text;
+        let isSpecial = false;
+        if (finalText.startsWith('##')) {
+            isSpecial = true;
+            finalText = finalText.substring(2).trim();
+        }
+
+        const {y,m,d} = obj;
+
+        const weekdaySpan=document.createElement('span');
+        weekdaySpan.className='weekday';
+        weekdaySpan.textContent=getAdjustedWeekday(y, m, d);
+        box.appendChild(weekdaySpan);
+
+        const dateLine=document.createElement('div');
+        dateLine.className='date-line';
+        dateLine.textContent=toPersianNumber(d)+' '+persianMonths[m-1]+' '+toPersianNumber(y);
+        box.appendChild(dateLine);
+
+        if(finalText){
+            const textSpan=document.createElement('span');
+            textSpan.className='text';
+            textSpan.textContent=finalText;
+            box.appendChild(textSpan);
+        }
+
+        let authorSpan = null;
+        if(obj.author){
+            authorSpan = document.createElement('span');
+            authorSpan.className='author';
+            authorSpan.textContent=obj.author;
+            box.appendChild(authorSpan);
+        }
+
+        container.appendChild(box);
+
+        if (isSpecial) {
+            setInterval(() => {
+            box.classList.toggle('highlight');
+            if (authorSpan) {
+                authorSpan.classList.toggle('highlight');
+            }
+            }, 600);
+        }
+        });
     }
-    orderedUnique.sort((a,b)=>a.key-b.key);
 
-    const filtered = orderedUnique.filter(o => {
-      if(o.key < todayKey) return false;
-      if(after830 && o.key === todayKey) return false;
-      return true;
-    });
-
-    filtered.forEach(obj=>{
-      const box=document.createElement('div');
-      box.className='date-box';
-      
-      let finalText = obj.text;
-      let isSpecial = false;
-      if (finalText.startsWith('##')) {
-        isSpecial = true;
-        finalText = finalText.substring(2).trim();
-      }
-
-      const {y,m,d} = obj;
-
-      const weekdaySpan=document.createElement('span');
-      weekdaySpan.className='weekday';
-      weekdaySpan.textContent=getAdjustedWeekday(y, m, d);
-      box.appendChild(weekdaySpan);
-
-      const dateLine=document.createElement('div');
-      dateLine.className='date-line';
-      dateLine.textContent=toPersianNumber(d)+' '+persianMonths[m-1]+' '+toPersianNumber(y);
-      box.appendChild(dateLine);
-
-      if(finalText){
-        const textSpan=document.createElement('span');
-        textSpan.className='text';
-        textSpan.textContent=finalText;
-        box.appendChild(textSpan);
-      }
-
-      let authorSpan = null;
-      if(obj.author){
-        authorSpan = document.createElement('span');
-        authorSpan.className='author';
-        authorSpan.textContent=obj.author;
-        box.appendChild(authorSpan);
-      }
-
-      container.appendChild(box);
-
-      if (isSpecial) {
-        setInterval(() => {
-          box.classList.toggle('highlight');
-          if (authorSpan) {
-            authorSpan.classList.toggle('highlight');
-          }
-        }, 600);
-      }
-    });
-
+    // --- ساخت دکمه شیشه‌ای و کنترل انیمیشن‌های ترتیبی ---
     const credit = document.createElement('div');
-    credit.className = 'ai-credit';
+    credit.className = 'liquid-glass';
     const creditText = document.createElement('span');
-    creditText.textContent = 'روح آدولف هیتلر بالای سر شماست✋';
+    creditText.className = 'glass-text';
+    creditText.textContent = 'ورود به نظرسنجی مدرسه';
     credit.appendChild(creditText);
     document.body.appendChild(credit);
+
+    // 1. شروع انیمیشن ورود
+    setTimeout(() => {
+      credit.classList.add('appear');
+    }, 400);
+
+    // 2. پایان انیمیشن ورود -> تثبیت وضعیت
+    credit.addEventListener('animationend', (e) => {
+        if(e.animationName === 'elasticEntrance') {
+            // حذف کلاس انیمیشن و اضافه کردن کلاس تثبیت
+            // این کار باعث می‌شود دکمه به سایز اولیه برنگردد
+            credit.classList.remove('appear');
+            credit.classList.add('stable');
+        }
+        
+        if(e.animationName === 'popClick') {
+            // پایان انیمیشن کلیک، حذف کلاس برای امکان کلیک مجدد (اختیاری)
+            credit.classList.remove('clicked');
+        }
+    });
+
+    // 3. ایونت کلیک
+    credit.addEventListener('click', function() {
+      if(this.classList.contains('clicked')) return;
+      
+      this.classList.add('clicked');
+      
+      setTimeout(() => {
+        window.open('https://digiform.ir/c259198bb9', '_blank');
+      }, 600);
+    });
 
     placeDates();
     window.addEventListener('resize',()=>setTimeout(placeDates,80));
@@ -487,17 +571,8 @@ function placeDates(){
   }catch(err){console.error('خطا:',err)}
   finally{
     document.getElementById('globalLoader').style.display='none';
-    setTimeout(() => location.reload(), 300000);
-  }
-
-  function getTodayJalaliKey(){
-    const today = new Date();
-    const gY = today.getFullYear(), gM = today.getMonth()+1, gD = today.getDate();
-    const {jy,jm,jd} = gregorianToJalali(gY,gM,gD);
-    return {jy,jm,jd, key: jy*10000 + jm*100 + jd, hour: today.getHours(), minute: today.getMinutes()};
   }
 })();
-}
 </script>
 </body>
 </html>
